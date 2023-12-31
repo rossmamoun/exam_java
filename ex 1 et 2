@@ -1,0 +1,113 @@
+import java.util.Arrays;
+
+// Exercice 1
+class Exercice1 {
+    public static int max30(int a, int b, int c) {
+        return Math.max(Math.max(a, b), c);
+    }
+}
+
+// Exercice 2
+abstract class Personne implements Comparable<Personne> {
+    private String nom;
+    private String prenom;
+    private String dateNaissance;
+
+    public Personne(String nom, String prenom, String dateNaissance) {
+        this.nom = nom;
+        this.prenom = prenom;
+        this.dateNaissance = dateNaissance;
+    }
+
+    public abstract void description();
+
+    @Override
+    public String toString() {
+        return "Nom: " + nom + ", Prénom: " + prenom + ", Date de naissance: " + dateNaissance;
+    }
+
+    @Override
+    public int compareTo(Personne personne) {
+        return this.nom.compareTo(personne.nom);
+    }
+}
+
+class Professeur extends Personne {
+    private String coursEnseigne;
+
+    public Professeur(String nom, String prenom, String dateNaissance, String coursEnseigne) {
+        super(nom, prenom, dateNaissance);
+        this.coursEnseigne = coursEnseigne;
+    }
+
+    @Override
+    public void description() {
+        System.out.println("Statut: Professeur, Cours enseigné: " + coursEnseigne);
+    }
+}
+
+class Etudiant extends Personne {
+    private String cne;
+    private double noteFinale;
+
+    public Etudiant(String nom, String prenom, String dateNaissance, String cne, double noteFinale) {
+        super(nom, prenom, dateNaissance);
+        this.cne = cne;
+        this.noteFinale = noteFinale;
+    }
+
+    @Override
+    public void description() {
+        System.out.println("Statut: Etudiant, CNE: " + cne + ", Note finale: " + noteFinale);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        // Création du tableau
+        Personne[] personnes = {
+                new Professeur("Dupont", "Jean", "01/01/1970", "Mathématiques"),
+                new Professeur("Martin", "Paul", "15/05/1985", "Informatique"),
+                new Etudiant("Dubois", "Alice", "10/12/1995", "12345", 15.5),
+                new Etudiant("Lefevre", "Thomas", "20/08/1998", "67890", 18.0)
+        };
+
+        // Affichage initial
+        for (Personne personne : personnes) {
+            personne.description();
+        }
+
+        // Tri par nom
+        Arrays.sort(personnes);
+
+        // Affichage après le tri
+        System.out.println("\nAprès le tri par nom :");
+        for (Personne personne : personnes) {
+            personne.description();
+        }
+
+        // Ajout d'un nouveau professeur
+        Personne nouveauProfesseur = new Professeur("Girard", "Sophie", "03/07/1980", "Physique");
+        personnes = Arrays.copyOf(personnes, personnes.length + 1);
+        personnes[personnes.length - 1] = nouveauProfesseur;
+
+        // Suppression du premier élément
+        personnes = Arrays.copyOfRange(personnes, 1, personnes.length);
+
+        // Copie du tableau
+        Personne[] copiePersonnes = Arrays.copyOf(personnes, personnes.length);
+
+        // Inversion des éléments du tableau
+        for (int i = 0; i < personnes.length / 2; i++) {
+            Personne temp = personnes[i];
+            personnes[i] = personnes[personnes.length - 1 - i];
+            personnes[personnes.length - 1 - i] = temp;
+        }
+
+        // Affichage après toutes les opérations
+        System.out.println("\nAprès toutes les opérations :");
+        for (Personne personne : personnes) {
+            personne.description();
+        }
+    }
+}
